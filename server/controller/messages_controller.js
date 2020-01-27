@@ -1,15 +1,27 @@
 var messages = [];
 var id = 0;
 
-var getTime = () => {
-    var longTime = new Date();
-    var time = longTime.getTime();
-    let hours, minutes, seconds;
+var getTimeStamp = () => {
+    var date = new Date();
+    let month, day, year, hours, minutes, seconds;
 
-    hours = longTime.getHours();
-    minutes = longTime.getMinutes();
-    seconds = longTime.getSeconds();
+    month = date.getMonth();
+    day = date.getDate();
+    year = date.getFullYear();
+
+    hours = date.getHours();
+    minutes = date.getMinutes();
+    seconds = date.getSeconds();
     
+    let dateArray = [(month + 1), day];
+    let formattedDate = dateArray.map(
+        val => {
+            if(val < 10){
+                return '0' + val;
+            }
+            return val;
+        }
+    );
 
     let timeArray = [hours, minutes, seconds];
     let formattedTime = timeArray.map(
@@ -23,19 +35,19 @@ var getTime = () => {
         }
     );
 
-    return formattedTime.join(':');
+    return `${formattedDate.join('/')}/${year} - ${formattedTime.join(':')}`;
 
 }
 
+
 var createMessage = (req, res) => {
     let {text} = req.body;
-    let time = getTime();
-    let fullDate = `${new Date().toDateString()} - ${time}`;
+    let time = getTimeStamp();
 
     var newMessage = {
         id: id,
         text: text,
-        time: fullDate
+        time: time
     }
     messages.push(newMessage);
     
@@ -63,7 +75,7 @@ var updateMessage = (req, res) => {
     }else{
 
         messages[targetIndex].text = text
-        messages[targetIndex].updatedTime = getTime();
+        messages[targetIndex].updatedTime = getTimeStamp();
 
         res
         .status(200)

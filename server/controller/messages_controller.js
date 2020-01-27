@@ -65,7 +65,7 @@ var readMessages = (req, res) => {
 
 var updateMessage = (req, res) => {
     let targetIndex = messages.findIndex(message => message.id == req.params.id);
-    let {text} = req.body;
+    let {text, time} = req.body;
 
     if(!text){
         res
@@ -74,7 +74,6 @@ var updateMessage = (req, res) => {
     }else{
 
         messages[targetIndex].text = text
-        messages[targetIndex].updatedTime = getTimeStamp();
 
         res
         .status(200)
